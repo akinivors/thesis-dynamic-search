@@ -1,0 +1,16 @@
+# Ignore Data Files
+*.json
+*.json.gz
+data/
+
+# Ignore Python Cache
+__pycache__/
+*.pyc
+
+# Ignore Virtual Environment
+venv/
+env/
+.env
+
+# Ignore OS files
+.DS_Store
