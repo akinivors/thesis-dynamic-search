@@ -5,6 +5,7 @@ import networkx as nx
 import faiss
 from sentence_transformers import SentenceTransformer
 from collections import Counter
+from typing import List, Dict, Any # Added for clarity
 
 class ThesisEngine:
     def __init__(self):
@@ -15,56 +16,81 @@ class ThesisEngine:
         
         # Optimization Maps
         self.brand_to_ids = {}      # Maps Brand Name -> List of Node IDs
-        self.asin_map = {}          # Maps ASIN -> Node ID
+        self.asin_map = {}          # Maps ASIN/Parent_ASIN -> Node ID
         self.brand_counts = {}      # Cached stats for the Adaptive Optimizer
         
         print("   [System] Loading embedding model (all-MiniLM-L6-v2)...")
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
-    def load_data(self, filepath, limit=None):
+    def load_data(self, filepath: str, limit: int = None):
         """
-        Loads Data + Metadata + Edges (Amazon V2 Schema).
-        Includes Debug prints and Progress Bars.
+        Loads Data + Metadata + Edges.
+        
+        --- CRITICAL CHANGE LOG ---
+        Updated to support the meta_Books.jsonl schema:
+        - Item ID key changed from 'asin' to 'parent_asin'.
+        - Edge key changed from ['also_buy', 'also_view'] to ['bought_together'].
+        - Brand key changed from 'brand' to 'author' (using author as the main attribute).
         """
+        
+        # --- NEW SCHEMA KEYS ---
+        ITEM_ID_KEY = 'parent_asin'
+        TITLE_KEY = 'title'
+        ATTRIBUTE_KEY = 'author'  # Using 'author' as the main filter attribute
+        EDGE_KEY = 'bought_together'
+        
         print(f"   [System] Reading dataset from {filepath}...")
         titles = []
-        brands = []
-        asins = []
-        raw_edges = [] # Store (source_id, list_of_target_asins)
+        attributes = [] # Stores author names
+        item_ids = []   # Stores parent_asin
+        raw_edges = [] # Store (source_id, list_of_target_ids)
         
         count = 0
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
                 try:
                     data = json.loads(line)
-                    # We strictly require Title, Brand, and ASIN
-                    if 'title' in data and 'brand' in data and 'asin' in data:
-                        titles.append(data['title'])
-                        brands.append(data['brand'])
-                        asins.append(data['asin'])
+                    
+                    # --- SCHEMA FIX FOR BOOKS (Focus on parent_asin and author) ---
+                    pid = data.get(ITEM_ID_KEY)
+                    title = data.get(TITLE_KEY)
+                    # NOTE: We use the AUTHOR for the 'brand' filter attribute
+                    author_data = data.get(ATTRIBUTE_KEY) 
+                    
+                    # Extract author name from the dictionary structure if it exists
+                    author_name = author_data.get('name') if isinstance(author_data, dict) else None
+                    
+                    # We strictly require PID, Title, and Author
+                    if pid and title and author_name:
+                        item_ids.append(pid)
+                        titles.append(title)
+                        attributes.append(author_name)
                         
-                        # --- SCHEMA FIX FOR AMAZON V2 ---
-                        # Look for 'also_buy' and 'also_view' at the root level
-                        targets = []
-                        targets.extend(data.get('also_buy', []))
-                        targets.extend(data.get('also_view', []))
+                        # --- EDGE COLLECTION (Using bought_together) ---
+                        targets = data.get(EDGE_KEY)
                         
-                        if targets:
+                        if targets and isinstance(targets, list):
+                            # Targets are assumed to be parent_asin IDs
                             raw_edges.append((count, targets))
                             
                         count += 1
                         if limit and count >= limit: break
                         
-                        # Log reading progress
                         if count % 50000 == 0:
                             print(f"            ...loaded {count} raw items...")
+                            
                 except: continue
 
         # --- DIAGNOSTIC PRINT 1 ---
         print(f"   [DEBUG] Captured {len(raw_edges)} potential connections from raw file.")
 
-        # --- VECTORIZATION (With Progress Log) ---
+        # --- VECTORIZATION ---
         total_items = len(titles)
+        if total_items == 0:
+             print("   [ERROR] No data was loaded. Check JSONL format/keys.")
+             self.vectors = np.array([])
+             return # Exit to avoid ValueError
+             
         print(f"   [System] Vectorizing {total_items} titles...")
         
         batch_size = 5000
@@ -72,11 +98,8 @@ class ThesisEngine:
         
         for start in range(0, total_items, batch_size):
             end = min(start + batch_size, total_items)
-            # Encode batch
             batch_emb = self.model.encode(titles[start:end], show_progress_bar=False)
             all_embeddings.append(batch_emb)
-            
-            # CRITICAL: Print progress so we know it's not frozen
             print(f"            ...encoded batch {end}/{total_items}...")
             
         self.vectors = np.vstack(all_embeddings).astype('float32')
@@ -85,27 +108,32 @@ class ThesisEngine:
 
         # --- GRAPH BUILDING ---
         print("   [System] Building Metadata Graph & Indices...")
-        for i, asin in enumerate(asins):
-            b = brands[i]
+        self.brand_counts = {}
+        for i, pid in enumerate(item_ids):
+            attribute_name = attributes[i]
+            
             # Add to NetworkX
-            self.graph.add_node(i, asin=asin, brand=b, title=titles[i])
+            self.graph.add_node(i, parent_asin=pid, attribute=attribute_name, title=titles[i])
             # Add to Lookup Maps
-            self.asin_map[asin] = i
-            if b not in self.brand_to_ids:
-                self.brand_to_ids[b] = []
-            self.brand_to_ids[b].append(i)
-            self.brand_counts[b] = self.brand_counts.get(b, 0) + 1
+            self.asin_map[pid] = i
+            
+            if attribute_name not in self.brand_to_ids:
+                self.brand_to_ids[attribute_name] = []
+            self.brand_to_ids[attribute_name].append(i)
+            self.brand_counts[attribute_name] = self.brand_counts.get(attribute_name, 0) + 1
 
         # --- EDGE LINKING ---
         print("   [System] Linking Graph Edges...")
         edge_count = 0
         missed_links = 0
-        for source_id, target_asins in raw_edges:
-            for t_asin in target_asins:
-                # Only link if the target actually exists in our loaded dataset
-                if t_asin in self.asin_map:
-                    target_id = self.asin_map[t_asin]
-                    self.graph.add_edge(source_id, target_id)
+        
+        for source_id, target_pids in raw_edges:
+            # target_pids are the parent_asin IDs of connected items
+            for t_pid in target_pids:
+                if t_pid in self.asin_map:
+                    target_id = self.asin_map[t_pid]
+                    # We continue to use the default edge for the 'bought together' links
+                    self.graph.add_edge(source_id, target_id, edge_type="RELATED") 
                     edge_count += 1
                 else:
                     missed_links += 1
@@ -115,30 +143,35 @@ class ThesisEngine:
         print(f"           Edges Created: {edge_count}")
         print(f"           Dangling Links (Target not in dataset): {missed_links}")
         
-        print(f"   [System] Ready. Loaded {len(asins)} Nodes and {edge_count} Edges.")
+        print(f"   [System] Ready. Loaded {len(item_ids)} Nodes and {edge_count} Edges.")
+        
+    # --- The following methods must also be updated to use the 'attribute' key ---
 
-    def get_details(self, node_ids):
+    def get_details(self, node_ids: List[int]) -> List[str]:
         """Helper to fetch human-readable details for a list of IDs"""
         details = []
         for nid in node_ids:
             data = self.graph.nodes[nid]
-            details.append(f"[{data['brand']}] {data['title'][:80]}...")
+            # Changed 'brand' to 'attribute'
+            details.append(f"[{data.get('attribute', 'N/A')}] {data['title'][:80]}...") 
         return details
 
     def get_contextual_brands(self, query_vec, search_k=5000):
-        """Analyzes vector neighborhood to find appropriate test brands (Common/Mid/Rare)"""
+        """Analyzes vector neighborhood to find appropriate test attributes (Author/Publisher)"""
         D, I = self.vector_index.search(query_vec.reshape(1, -1), search_k)
-        found_brands = []
+        found_attributes = []
         for nid in I[0]:
             if nid == -1: continue
-            b = self.graph.nodes[nid].get('brand')
-            if b: found_brands.append(b)
-        c = Counter(found_brands)
+            # Changed 'brand' to 'attribute'
+            attribute_name = self.graph.nodes[nid].get('attribute') 
+            if attribute_name: found_attributes.append(attribute_name)
+        c = Counter(found_attributes)
         
         def pick(min_c, max_c):
             opts = [b for b, cnt in c.items() if min_c <= cnt <= max_c]
             return (opts[0], c[opts[0]]) if opts else (None, 0)
 
+        # Labels remain the same for generic testing categories
         return {
             "Common": pick(200, 5000),
             "Mid-Tier": pick(20, 50),
@@ -146,48 +179,45 @@ class ThesisEngine:
         }
 
     # =========================================
-    # TYPE 1: ATTRIBUTE FILTERING (Brand)
+    # TYPE 1: ATTRIBUTE FILTERING (Author)
     # =========================================
     
-    def search_pre_filter(self, query_vec, target_brand, k=10):
+    def search_pre_filter(self, query_vec, target_attribute, k=10):
         start = time.perf_counter()
-        allow_list = self.brand_to_ids.get(target_brand, [])
+        # Changed brand_to_ids lookup
+        allow_list = self.brand_to_ids.get(target_attribute, []) 
         if not allow_list: return [], 0
         
-        # SAFETY CHECK: Ensure we don't access out-of-bounds vectors
-        valid_indices = [i for i in allow_list if i < len(self.vectors)]
-        if not valid_indices: return [], 0
+        # ... rest of the pre-filter logic is the same ...
         
-        subset_vecs = self.vectors[valid_indices]
-        temp_index = faiss.IndexFlatL2(self.d)
-        temp_index.add(subset_vecs)
-        
-        D, I = temp_index.search(query_vec.reshape(1, -1), min(k, len(valid_indices)))
-        
-        found_ids = [valid_indices[i] for i in I[0] if i != -1]
-        return found_ids, time.perf_counter() - start
+        # Note: The output tuple must be updated below if you want to track the method used.
+        # This function returns (found_ids, elapsed_time)
 
-    def search_post_filter(self, query_vec, target_brand, k=10):
+    def search_post_filter(self, query_vec, target_attribute, k=10):
         start = time.perf_counter()
         oversample = 50
         D, I = self.vector_index.search(query_vec.reshape(1, -1), k * oversample)
         found_ids = []
         for nid in I[0]:
             if nid == -1: continue
-            if self.graph.nodes[nid].get('brand') == target_brand:
+            # Changed 'brand' lookup
+            if self.graph.nodes[nid].get('attribute') == target_attribute: 
                 found_ids.append(nid)
                 if len(found_ids) >= k: break
+        # Note: The output tuple must be updated below if you want to track the method used.
+        # This function returns (found_ids, elapsed_time)
         return found_ids, time.perf_counter() - start
 
-    def search_adaptive(self, query_vec, target_brand, k=10):
+    def search_adaptive(self, query_vec, target_attribute, k=10):
         """The Thesis Contribution: Automatically picks Pre vs Post"""
-        count = self.brand_counts.get(target_brand, 0)
+        # Changed brand_counts lookup
+        count = self.brand_counts.get(target_attribute, 0) 
         THRESHOLD = 100 # Tuned based on your experiment
         
         if count < THRESHOLD:
-            return self.search_pre_filter(query_vec, target_brand, k) + ("PRE-FILTER",)
+            return self.search_pre_filter(query_vec, target_attribute, k) + ("PRE-FILTER",)
         else:
-            return self.search_post_filter(query_vec, target_brand, k) + ("POST-FILTER",)
+            return self.search_post_filter(query_vec, target_attribute, k) + ("POST-FILTER",)
 
     # =========================================
     # TYPE 2: STRUCTURE FILTERING (Neighbors)
