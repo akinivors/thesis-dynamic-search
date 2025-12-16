@@ -2,7 +2,7 @@ import json
 import os
 
 # --- Configuration (MUST MATCH your experiment setup) ---
-DATA_FILE_NAME = "meta_Books.jsonl"
+DATA_FILE_NAME = "meta_Electronics.json"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, 'data', DATA_FILE_NAME) 
 
