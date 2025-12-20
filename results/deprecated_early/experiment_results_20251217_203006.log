@@ -1,0 +1,73 @@
+========================================================================================================================
+COMPREHENSIVE EXPERIMENT: Pre-Filter vs Post-Filter
+========================================================================================================================
+
+Timestamp: 2025-12-17 20:30:06.744857
+Log file: experiment_results_20251217_203006.log
+Results file: experiment_results_20251217_203006.json
+
+Testing:
+  Strategies: Pre-Filter HNSW vs Post-Filter HNSW
+  Filter Types:  Categorical vs Numeric
+  Cache Status: Cached vs Not Cached
+========================================================================================================================
+
+[1/4] Initializing engine...
+
+[2/4] Examining what's cached...
+
+Cache Statistics:
+  Total cached indexes: 9
+  Categorical cached: 0
+  Numeric cached: 9
+
+  Categorical cache keys (first 10):
+
+  Numeric cache keys:
+    - price>25
+    - price>50
+    - price>75
+    - price>100
+    - price>150
+    - price>200
+    - price>300
+    - price>500
+    - price>1000
+
+[3/4] Test query: 'high quality laptop computer'
+
+[4/4] Running 7 test cases...
+========================================================================================================================
+
+========================================================================================================================
+TEST 1/7:  Categorical - Cached (Large)
+========================================================================================================================
+  Type: categorical
+  Cached: True
+  Matching items:  0 (0.00%)
+  Cache key: 'Computers'
+  Actually in cache: False
+
+  >>> STRATEGY 1: PRE-FILTER HNSW
+      ⚠️  NOT IN CACHE - Building temp index...
+      No matching items - skipping index build
+      Total time: 36.08ms
+      Results: 0/10 items
+
+  >>> STRATEGY 2: POST-FILTER HNSW
+      Total time: 15.35ms
+      Results:  0/10 items
+
+  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    Pre-Filter:       36.08ms
+    Post-Filter:     15.35ms
+    Winner: Post-Filter (2.4x faster)
+  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+========================================================================================================================
+TEST 2/7:  Categorical - Cached (Medium)
+========================================================================================================================
+  Type: categorical
+  Cached: True

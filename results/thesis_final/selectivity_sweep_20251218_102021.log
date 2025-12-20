@@ -1,0 +1,15 @@
+========================================================================================================================
+SELECTIVITY SWEEP EXPERIMENT:    TRUE Bitmap vs Post-Filter (NO CACHING)
+========================================================================================================================
+
+Timestamp: 2025-12-18 10:20:21.376044
+Log file: selectivity_sweep_20251218_102021.log
+Results file: selectivity_sweep_20251218_102021. json
+
+Hypothesis:
+  - Low selectivity (<1.5%): TRUE Bitmap should win
+  - High selectivity (>1.5%): Post-Filter should win
+  - Goal: Find the exact crossover point
+========================================================================================================================
+
+[1/3] Initializing engine...

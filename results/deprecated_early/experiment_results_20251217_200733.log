@@ -1,0 +1,17 @@
+========================================================================================================================
+COMPREHENSIVE EXPERIMENT: Pre-Filter vs Post-Filter
+========================================================================================================================
+
+Timestamp: 2025-12-17 20:07:33.701365
+Log file: experiment_results_20251217_200733.log
+Results file: experiment_results_20251217_200733.json
+
+Testing:
+  Strategies: Pre-Filter HNSW vs Post-Filter HNSW
+  Filter Types:  Categorical vs Numeric
+  Cache Status: Cached vs Not Cached
+========================================================================================================================
+
+[1/4] Initializing engine...
+
+[2/4] Examining what's cached...

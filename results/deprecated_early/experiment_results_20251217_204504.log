@@ -1,0 +1,46 @@
+========================================================================================================================
+COMPREHENSIVE EXPERIMENT: Pre-Filter vs Post-Filter
+========================================================================================================================
+
+Timestamp: 2025-12-17 20:45:04.060747
+Log file: experiment_results_20251217_204504.log
+Results file: experiment_results_20251217_204504.json
+
+Testing:
+  Strategies: Pre-Filter HNSW vs Post-Filter HNSW
+  Filter Types:  Categorical vs Numeric
+  Cache Status: Cached vs Not Cached
+========================================================================================================================
+
+[1/4] Initializing engine...
+
+[2/4] Examining what's cached...
+
+Cache Statistics:
+  Total cached indexes: 9
+  Categorical cached: 0
+  Numeric cached: 9
+
+  Categorical cache keys (first 10):
+
+  Numeric cache keys:
+    - price>25
+    - price>50
+    - price>75
+    - price>100
+    - price>150
+    - price>200
+    - price>300
+    - price>500
+    - price>1000
+
+[3/4] Test query: 'high quality laptop computer'
+
+[4/4] Running 7 test cases...
+========================================================================================================================
+
+========================================================================================================================
+TEST 1/7:  Categorical - Cached (Large - Electronics)
+========================================================================================================================
+  Type: categorical
+  Cached: True

@@ -1,0 +1,52 @@
+============================================================================================================================================
+DETAILED ANALYSIS:  TRUE Bitmap vs Post-Filter (With Ground Truth & Recall)
+============================================================================================================================================
+
+Timestamp: 2025-12-18 10:39:49.897347
+Log file: detailed_analysis_20251218_103949.log
+Results file: detailed_analysis_20251218_103949.json
+============================================================================================================================================
+
+[1/4] Initializing engine...
+
+[2/4] Test queries: 5
+  1. 'laptop computer high quality'
+  2. 'wireless bluetooth headphones'
+  3. 'gaming mouse RGB'
+  4. 'phone charger cable usb'
+  5. 'camera digital photography'
+
+[3/4] Defining test cases...
+
+Total test cases: 10
+  1. price > $2000 (numeric)
+  2. price > $500 (numeric)
+  3. price > $200 (numeric)
+  4. price > $100 (numeric)
+  5. price > $50 (numeric)
+  6. price > $25 (numeric)
+  7. price $50-$100 (numeric_range)
+  8. price $100-$200 (numeric_range)
+  9. category = Electronics (categorical)
+  10. category = Computers (categorical)
+
+[4/4] Running experiments...
+============================================================================================================================================
+
+============================================================================================================================================
+QUERY 1/5: 'laptop computer high quality'
+============================================================================================================================================
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 1/10: price > $2000
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $2000
+  Type: numeric
+  Matching items: 12 (0.02% selectivity)
+  Count time: 3.317ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 3.542ms
+      Found:  10/10 items
+
+      Ground Truth Results:

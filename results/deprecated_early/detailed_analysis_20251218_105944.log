@@ -1,0 +1,1368 @@
+============================================================================================================================================
+DETAILED ANALYSIS:  TRUE Bitmap vs Post-Filter (With Ground Truth & Recall)
+============================================================================================================================================
+
+Timestamp: 2025-12-18 10:59:44.682097
+Log file: detailed_analysis_20251218_105944.log
+Results file: detailed_analysis_20251218_105944.json
+============================================================================================================================================
+
+[1/4] Initializing engine...
+
+[2/4] Test queries: 5
+  1. 'laptop computer high quality'
+  2. 'wireless bluetooth headphones'
+  3. 'gaming mouse RGB'
+  4. 'phone charger cable usb'
+  5. 'camera digital photography'
+
+[3/4] Defining test cases...
+
+Total test cases: 10
+  1. price > $2000 (numeric)
+  2. price > $500 (numeric)
+  3. price > $200 (numeric)
+  4. price > $100 (numeric)
+  5. price > $50 (numeric)
+  6. price > $25 (numeric)
+  7. price $50-$100 (numeric_range)
+  8. price $100-$200 (numeric_range)
+  9. category = Electronics (categorical)
+  10. category = Computers (categorical)
+
+[4/4] Running experiments...
+============================================================================================================================================
+
+============================================================================================================================================
+QUERY 1/5: 'laptop computer high quality'
+============================================================================================================================================
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 1/10: price > $2000
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $2000
+  Type: numeric
+  Matching items: 226 (0.03% selectivity)
+  Count time: 53.402ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 50.884ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [660990] $2499.11 - Unknown
+        2. [607734] $2624.95 - Unknown
+        3. [727334] $2020.94 - Unknown
+        4. [741108] $2299.22 - Unknown
+        5. [754065] $2999.77 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 12.848ms
+      Found:  3/10 items
+
+      TRUE Bitmap Results:
+        1. [660990] $2499.11 - Unknown
+        2. [727334] $2020.94 - Unknown
+        3. [616318] $60576.05 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.675ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 30.0% (3/10 matches)
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:      12.848ms  (Recall: 30.0%)
+    Post-Filter:       8.675ms  (Recall: 0.0%)
+    Ground Truth:    50.884ms  (Baseline)
+    Winner: Post-Filter (1.48x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 2/10: price > $500
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $500
+  Type: numeric
+  Matching items: 1,986 (0.25% selectivity)
+  Count time: 53.934ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 51.753ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [710077] $1049.97 - Unknown
+        2. [747804] $888.00 - Unknown
+        3. [764612] $617.19 - Unknown
+        4. [593482] $629.83 - Unknown
+        5. [447293] $589.22 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 1.188ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [710077] $1049.97 - Unknown
+        2. [747804] $888.00 - Unknown
+        3. [593482] $629.83 - Unknown
+        4. [504688] $599.99 - Unknown
+        5. [767751] $800.00 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 6.802ms
+      Found: 9/10 items
+
+      Post-Filter Results:
+        1. [710077] $1049.97 - Unknown
+        2. [747804] $888.00 - Unknown
+        3. [593482] $629.83 - Unknown
+        4. [504688] $599.99 - Unknown
+        5. [495903] $760.00 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 70.0% (7/10 matches)
+      Post-Filter Recall: 60.0% (6/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       1.188ms  (Recall: 70.0%)
+    Post-Filter:       6.802ms  (Recall: 60.0%)
+    Ground Truth:    51.753ms  (Baseline)
+    Winner: TRUE Bitmap (5.72x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 3/10: price > $200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $200
+  Type: numeric
+  Matching items: 7,216 (0.92% selectivity)
+  Count time: 52.601ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 56.833ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [533631] $349.99 - Unknown
+        4. [710077] $1049.97 - Unknown
+        5. [390712] $299.90 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 2.588ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [533631] $349.99 - Unknown
+        4. [710077] $1049.97 - Unknown
+        5. [390712] $299.90 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.788ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [533631] $349.99 - Unknown
+        4. [710077] $1049.97 - Unknown
+        5. [390712] $299.90 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 100.0% (10/10 matches)
+      Post-Filter Recall: 100.0% (10/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       2.588ms  (Recall: 100.0%)
+    Post-Filter:       8.788ms  (Recall: 100.0%)
+    Ground Truth:    56.833ms  (Baseline)
+    Winner: TRUE Bitmap (3.40x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 4/10: price > $100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $100
+  Type: numeric
+  Matching items: 14,584 (1.85% selectivity)
+  Count time: 88.401ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 79.209ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 3.979ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.711ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 90.0% (9/10 matches)
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       3.979ms  (Recall: 90.0%)
+    Post-Filter:       7.711ms  (Recall: 90.0%)
+    Ground Truth:    79.209ms  (Baseline)
+    Winner: TRUE Bitmap (1.94x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 5/10: price > $50
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $50
+  Type: numeric
+  Matching items: 28,965 (3.68% selectivity)
+  Count time: 53.350ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 92.766ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 6.033ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.914ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 90.0% (9/10 matches)
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       6.033ms  (Recall: 90.0%)
+    Post-Filter:       7.914ms  (Recall: 90.0%)
+    Ground Truth:    92.766ms  (Baseline)
+    Winner: TRUE Bitmap (1.31x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 6/10: price > $25
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $25
+  Type: numeric
+  Matching items: 55,529 (7.06% selectivity)
+  Count time: 53.951ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 162.124ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 11.246ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.064ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [341500] $339.08 - Unknown
+        2. [345286] $294.23 - Unknown
+        3. [744905] $143.21 - Unknown
+        4. [490991] $168.51 - Unknown
+        5. [533631] $349.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 90.0% (9/10 matches)
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:      11.246ms  (Recall: 90.0%)
+    Post-Filter:       7.064ms  (Recall: 90.0%)
+    Ground Truth:   162.124ms  (Baseline)
+    Winner: Post-Filter (1.59x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 7/10: price $50-$100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $50-$100
+  Type: numeric_range
+  Matching items: 14,381 (1.83% selectivity)
+  Count time: 60.085ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 76.444ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [703453] $78.83 - Unknown
+        2. [498920] $68.02 - Unknown
+        3. [421618] $76.61 - Unknown
+        4. [389687] $86.36 - Unknown
+        5. [707439] $95.19 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.259ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [703453] $78.83 - Unknown
+        2. [421618] $76.61 - Unknown
+        3. [389687] $86.36 - Unknown
+        4. [700090] $70.31 - Unknown
+        5. [696342] $57.81 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 80.0% (8/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 8/10: price $100-$200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $100-$200
+  Type: numeric_range
+  Matching items: 7,368 (0.94% selectivity)
+  Count time: 67.436ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 70.039ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [744905] $143.21 - Unknown
+        2. [490991] $168.51 - Unknown
+        3. [569095] $199.00 - Unknown
+        4. [732147] $129.16 - Unknown
+        5. [97606] $139.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.687ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [744905] $143.21 - Unknown
+        2. [490991] $168.51 - Unknown
+        3. [569095] $199.00 - Unknown
+        4. [97606] $139.00 - Unknown
+        5. [271548] $142.23 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 9/10: category = Electronics
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: category = Electronics
+  Type: categorical
+  Matching items: 8 (0.00% selectivity)
+  Count time: 79.457ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 77.735ms
+      Found:  8/10 items
+
+      Ground Truth Results:
+        1. [291729] $4.50 - Unknown
+        2. [287626] $0.00 - Unknown
+        3. [334491] $0.00 - Unknown
+        4. [683719] $0.00 - Unknown
+        5. [376022] $0.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'categorical' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 9.022ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 10/10: category = Computers
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: category = Computers
+  Type: categorical
+  Matching items: 244,659 (31.11% selectivity)
+  Count time: 556101.584ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 555518.632ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [330406] $0.00 - Unknown
+        2. [347457] $0.00 - Unknown
+        3. [347424] $0.00 - Unknown
+        4. [323204] $0.00 - Unknown
+        5. [381210] $0.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'categorical' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 3809.297ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [323204] $0.00 - Unknown
+        2. [381210] $0.00 - Unknown
+        3. [419133] $0.00 - Unknown
+        4. [270580] $0.00 - Unknown
+        5. [393864] $0.00 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 50.0% (5/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+============================================================================================================================================
+QUERY 2/5: 'wireless bluetooth headphones'
+============================================================================================================================================
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 1/10: price > $2000
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $2000
+  Type: numeric
+  Matching items: 226 (0.03% selectivity)
+  Count time: 58.017ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 50.753ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [579138] $2699.00 - Unknown
+        2. [584710] $2555.00 - Unknown
+        3. [312018] $2207.41 - Unknown
+        4. [603504] $8626.34 - Unknown
+        5. [652674] $2499.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 79.816ms
+      Found:  0/10 items
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.152ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:      79.816ms  (Recall: 0.0%)
+    Post-Filter:       7.152ms  (Recall: 0.0%)
+    Ground Truth:    50.753ms  (Baseline)
+    Winner: Post-Filter (11.16x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 2/10: price > $500
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $500
+  Type: numeric
+  Matching items: 1,986 (0.25% selectivity)
+  Count time: 52.872ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 54.732ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [713646] $614.22 - Unknown
+        2. [712014] $528.00 - Unknown
+        3. [207611] $749.00 - Unknown
+        4. [703088] $800.00 - Unknown
+        5. [730331] $759.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 1.284ms
+      Found:  1/10 items
+
+      TRUE Bitmap Results:
+        1. [713646] $614.22 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.611ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 10.0% (1/10 matches)
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       1.284ms  (Recall: 10.0%)
+    Post-Filter:       7.611ms  (Recall: 0.0%)
+    Ground Truth:    54.732ms  (Baseline)
+    Winner: TRUE Bitmap (5.93x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 3/10: price > $200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $200
+  Type: numeric
+  Matching items: 7,216 (0.92% selectivity)
+  Count time: 51.795ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 63.682ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [773787] $219.40 - Unknown
+        2. [577936] $249.99 - Unknown
+        3. [725154] $404.87 - Unknown
+        4. [142648] $235.00 - Unknown
+        5. [173331] $229.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 3.198ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [773787] $219.40 - Unknown
+        2. [577936] $249.99 - Unknown
+        3. [725154] $404.87 - Unknown
+        4. [204104] $494.00 - Unknown
+        5. [577937] $299.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.513ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 60.0% (6/10 matches)
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       3.198ms  (Recall: 60.0%)
+    Post-Filter:       7.513ms  (Recall: 0.0%)
+    Ground Truth:    63.682ms  (Baseline)
+    Winner: TRUE Bitmap (2.35x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 4/10: price > $100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $100
+  Type: numeric
+  Matching items: 14,584 (1.85% selectivity)
+  Count time: 52.975ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 76.151ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [356692] $140.63 - Unknown
+        2. [508634] $109.99 - Unknown
+        3. [773787] $219.40 - Unknown
+        4. [650838] $139.95 - Unknown
+        5. [523636] $181.55 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 3.697ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [356692] $140.63 - Unknown
+        2. [508634] $109.99 - Unknown
+        3. [773787] $219.40 - Unknown
+        4. [650838] $139.95 - Unknown
+        5. [523636] $181.55 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 9.631ms
+      Found: 2/10 items
+
+      Post-Filter Results:
+        1. [356692] $140.63 - Unknown
+        2. [508634] $109.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 80.0% (8/10 matches)
+      Post-Filter Recall: 20.0% (2/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       3.697ms  (Recall: 80.0%)
+    Post-Filter:       9.631ms  (Recall: 20.0%)
+    Ground Truth:    76.151ms  (Baseline)
+    Winner: TRUE Bitmap (2.61x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 5/10: price > $50
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $50
+  Type: numeric
+  Matching items: 28,965 (3.68% selectivity)
+  Count time: 52.686ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 105.748ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [731639] $75.59 - Unknown
+        2. [134818] $83.45 - Unknown
+        3. [356692] $140.63 - Unknown
+        4. [708096] $59.83 - Unknown
+        5. [626311] $99.95 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 8.215ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [731639] $75.59 - Unknown
+        2. [134818] $83.45 - Unknown
+        3. [356692] $140.63 - Unknown
+        4. [708096] $59.83 - Unknown
+        5. [626311] $99.95 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.729ms
+      Found: 9/10 items
+
+      Post-Filter Results:
+        1. [731639] $75.59 - Unknown
+        2. [134818] $83.45 - Unknown
+        3. [356692] $140.63 - Unknown
+        4. [708096] $59.83 - Unknown
+        5. [626311] $99.95 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 100.0% (10/10 matches)
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       8.215ms  (Recall: 100.0%)
+    Post-Filter:       8.729ms  (Recall: 90.0%)
+    Ground Truth:   105.748ms  (Baseline)
+    Winner: TRUE Bitmap (1.06x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 6/10: price > $25
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $25
+  Type: numeric
+  Matching items: 55,529 (7.06% selectivity)
+  Count time: 52.793ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 157.083ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [718567] $50.00 - Unknown
+        2. [731639] $75.59 - Unknown
+        3. [572297] $39.95 - Unknown
+        4. [633227] $25.95 - Unknown
+        5. [134818] $83.45 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 8.975ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [718567] $50.00 - Unknown
+        2. [731639] $75.59 - Unknown
+        3. [572297] $39.95 - Unknown
+        4. [633227] $25.95 - Unknown
+        5. [134818] $83.45 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 6.793ms
+      Found: 7/10 items
+
+      Post-Filter Results:
+        1. [718567] $50.00 - Unknown
+        2. [731639] $75.59 - Unknown
+        3. [572297] $39.95 - Unknown
+        4. [633227] $25.95 - Unknown
+        5. [134818] $83.45 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 100.0% (10/10 matches)
+      Post-Filter Recall: 70.0% (7/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       8.975ms  (Recall: 100.0%)
+    Post-Filter:       6.793ms  (Recall: 70.0%)
+    Ground Truth:   157.083ms  (Baseline)
+    Winner: Post-Filter (1.32x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 7/10: price $50-$100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $50-$100
+  Type: numeric_range
+  Matching items: 14,381 (1.83% selectivity)
+  Count time: 58.428ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 66.697ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [731639] $75.59 - Unknown
+        2. [134818] $83.45 - Unknown
+        3. [708096] $59.83 - Unknown
+        4. [626311] $99.95 - Unknown
+        5. [680126] $53.53 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.660ms
+      Found: 10/10 items
+
+      Post-Filter Results:
+        1. [731639] $75.59 - Unknown
+        2. [134818] $83.45 - Unknown
+        3. [708096] $59.83 - Unknown
+        4. [626311] $99.95 - Unknown
+        5. [680126] $53.53 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 90.0% (9/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 8/10: price $100-$200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $100-$200
+  Type: numeric_range
+  Matching items: 7,368 (0.94% selectivity)
+  Count time: 57.954ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 61.445ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [356692] $140.63 - Unknown
+        2. [508634] $109.99 - Unknown
+        3. [650838] $139.95 - Unknown
+        4. [523636] $181.55 - Unknown
+        5. [562011] $179.95 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.303ms
+      Found: 2/10 items
+
+      Post-Filter Results:
+        1. [356692] $140.63 - Unknown
+        2. [508634] $109.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 20.0% (2/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 9/10: category = Electronics
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: category = Electronics
+  Type: categorical
+  Matching items: 8 (0.00% selectivity)
+  Count time: 71.897ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 73.599ms
+      Found:  8/10 items
+
+      Ground Truth Results:
+        1. [291729] $4.50 - Unknown
+        2. [683719] $0.00 - Unknown
+        3. [391966] $0.00 - Unknown
+        4. [376002] $0.00 - Unknown
+        5. [376211] $0.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'categorical' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.667ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 10/10: category = Computers
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: category = Computers
+  Type: categorical
+  Matching items: 244,659 (31.11% selectivity)
+  Count time: 557143.784ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 638118.941ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [710307] $0.00 - Unknown
+        2. [672659] $0.00 - Unknown
+        3. [733610] $0.00 - Unknown
+        4. [112871] $0.00 - Unknown
+        5. [343597] $0.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'categorical' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 3911.089ms
+      Found: 1/10 items
+
+      Post-Filter Results:
+        1. [710307] $0.00 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 10.0% (1/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+============================================================================================================================================
+QUERY 3/5: 'gaming mouse RGB'
+============================================================================================================================================
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 1/10: price > $2000
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $2000
+  Type: numeric
+  Matching items: 226 (0.03% selectivity)
+  Count time: 53.753ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 50.777ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [291180] $3199.00 - Unknown
+        3. [551866] $2998.95 - Unknown
+        4. [369960] $2729.00 - Unknown
+        5. [364915] $12680.93 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 237.832ms
+      Found:  1/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.492ms
+      Found: 1/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 10.0% (1/10 matches)
+      Post-Filter Recall: 10.0% (1/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:     237.832ms  (Recall: 10.0%)
+    Post-Filter:       7.492ms  (Recall: 10.0%)
+    Ground Truth:    50.777ms  (Baseline)
+    Winner: Post-Filter (31.75x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 2/10: price > $500
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $500
+  Type: numeric
+  Matching items: 1,986 (0.25% selectivity)
+  Count time: 52.520ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 54.865ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [339066] $899.95 - Unknown
+        4. [775797] $800.00 - Unknown
+        5. [593945] $599.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 1.259ms
+      Found:  5/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [339066] $899.95 - Unknown
+        4. [528497] $1499.00 - Unknown
+        5. [207141] $560.00 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.683ms
+      Found: 2/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 30.0% (3/10 matches)
+      Post-Filter Recall: 20.0% (2/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       1.259ms  (Recall: 30.0%)
+    Post-Filter:       7.683ms  (Recall: 20.0%)
+    Ground Truth:    54.865ms  (Baseline)
+    Winner: TRUE Bitmap (6.10x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 3/10: price > $200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $200
+  Type: numeric
+  Matching items: 7,216 (0.92% selectivity)
+  Count time: 53.414ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 70.800ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+        4. [31209] $299.99 - Unknown
+        5. [61576] $299.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 2.480ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+        4. [759280] $243.79 - Unknown
+        5. [122597] $277.51 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.478ms
+      Found: 3/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 60.0% (6/10 matches)
+      Post-Filter Recall: 30.0% (3/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       2.480ms  (Recall: 60.0%)
+    Post-Filter:       8.478ms  (Recall: 30.0%)
+    Ground Truth:    70.800ms  (Baseline)
+    Winner: TRUE Bitmap (3.42x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 4/10: price > $100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $100
+  Type: numeric
+  Matching items: 14,584 (1.85% selectivity)
+  Count time: 52.858ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 83.206ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+        4. [22227] $183.20 - Unknown
+        5. [52594] $183.20 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 3.568ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+        4. [759280] $243.79 - Unknown
+        5. [732784] $109.95 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.703ms
+      Found: 3/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+        2. [772960] $999.99 - Unknown
+        3. [116693] $498.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 50.0% (5/10 matches)
+      Post-Filter Recall: 30.0% (3/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       3.568ms  (Recall: 50.0%)
+    Post-Filter:       8.703ms  (Recall: 30.0%)
+    Ground Truth:    83.206ms  (Baseline)
+    Winner: TRUE Bitmap (2.44x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 5/10: price > $50
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $50
+  Type: numeric
+  Matching items: 28,965 (3.68% selectivity)
+  Count time: 52.345ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 175.190ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [74221] $89.99 - Unknown
+        4. [772960] $999.99 - Unknown
+        5. [116693] $498.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 7.342ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [74221] $89.99 - Unknown
+        4. [772960] $999.99 - Unknown
+        5. [116693] $498.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.111ms
+      Found: 5/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [772960] $999.99 - Unknown
+        4. [116693] $498.99 - Unknown
+        5. [203317] $69.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 70.0% (7/10 matches)
+      Post-Filter Recall: 50.0% (5/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:       7.342ms  (Recall: 70.0%)
+    Post-Filter:       7.111ms  (Recall: 50.0%)
+    Ground Truth:   175.190ms  (Baseline)
+    Winner: Post-Filter (1.03x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 6/10: price > $25
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price > $25
+  Type: numeric
+  Matching items: 55,529 (7.06% selectivity)
+  Count time: 53.127ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 162.376ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [68898] $40.00 - Unknown
+        4. [389344] $48.70 - Unknown
+        5. [74221] $89.99 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      Total time: 16.585ms
+      Found:  10/10 items
+
+      TRUE Bitmap Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [68898] $40.00 - Unknown
+        4. [389344] $48.70 - Unknown
+        5. [74221] $89.99 - Unknown
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 7.870ms
+      Found: 4/10 items
+
+      Post-Filter Results:
+        1. [564270] $4444.00 - Unknown
+        2. [545770] $50.98 - Unknown
+        3. [68898] $40.00 - Unknown
+        4. [389344] $48.70 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: 80.0% (8/10 matches)
+      Post-Filter Recall: 40.0% (4/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    TRUE Bitmap:      16.585ms  (Recall: 80.0%)
+    Post-Filter:       7.870ms  (Recall: 40.0%)
+    Ground Truth:   162.376ms  (Baseline)
+    Winner: Post-Filter (2.11x faster)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 7/10: price $50-$100
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $50-$100
+  Type: numeric_range
+  Matching items: 14,381 (1.83% selectivity)
+  Count time: 66.735ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 83.396ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [545770] $50.98 - Unknown
+        2. [74221] $89.99 - Unknown
+        3. [294821] $79.99 - Unknown
+        4. [203317] $69.99 - Unknown
+        5. [341070] $59.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.451ms
+      Found: 2/10 items
+
+      Post-Filter Results:
+        1. [545770] $50.98 - Unknown
+        2. [203317] $69.99 - Unknown
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall: 20.0% (2/10 matches)
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 8/10: price $100-$200
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: price $100-$200
+  Type: numeric_range
+  Matching items: 7,368 (0.94% selectivity)
+  Count time: 60.603ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 107.594ms
+      Found:  10/10 items
+
+      Ground Truth Results:
+        1. [22227] $183.20 - Unknown
+        2. [52594] $183.20 - Unknown
+        3. [604260] $113.00 - Unknown
+        4. [732784] $109.95 - Unknown
+        5. [361518] $115.24 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'numeric_range' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 13.380ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 9/10: category = Electronics
+--------------------------------------------------------------------------------------------------------------------------------------------
+  Filter: category = Electronics
+  Type: categorical
+  Matching items: 8 (0.00% selectivity)
+  Count time: 80.744ms
+
+  >>> GROUND TRUTH (Exhaustive Search)
+      Total time: 73.032ms
+      Found:  8/10 items
+
+      Ground Truth Results:
+        1. [291729] $4.50 - Unknown
+        2. [287626] $0.00 - Unknown
+        3. [391966] $0.00 - Unknown
+        4. [334491] $0.00 - Unknown
+        5. [376002] $0.00 - Unknown
+
+  >>> STRATEGY 1: TRUE Bitmap Filter (Global HNSW)
+      SKIPPED (filter type 'categorical' not supported)
+
+  >>> STRATEGY 2: Post-Filter HNSW
+      Total time: 8.001ms
+      Found: 0/10 items
+
+  >>> RECALL ANALYSIS
+      TRUE Bitmap Recall: N/A
+      Post-Filter Recall:  N/A
+
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  COMPARISON:
+    Cannot compare (one or both strategies failed)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+TEST 10/10: category = Computers
+--------------------------------------------------------------------------------------------------------------------------------------------
