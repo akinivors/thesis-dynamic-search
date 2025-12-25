@@ -1,0 +1,4 @@
+Selectivity_Zone,Naive Latency (ms),Naive Recall (%),Bitmap Latency (ms),Bitmap Recall (%),Adaptive Latency (ms),Adaptive Recall (%)
+1. Rare (<1%),4.52,17.0,1.53,11.67,50.59,47.33
+2. Medium (1-10%),0.62,40.0,26.3,85.0,8.28,88.0
+3. Common (>10%),0.65,77.67,7.77,28.0,1.03,95.67

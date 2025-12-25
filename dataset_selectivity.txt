@@ -1,0 +1,54 @@
+=== DATASET STATISTICS ===
+Total Products: 786,445
+
+[Column Presence]
+   - category: 786,445 (100.0%)
+   - tech1: 786,445 (100.0%)
+   - description: 786,445 (100.0%)
+   - fit: 786,445 (100.0%)
+   - title: 786,445 (100.0%)
+   - also_buy: 786,445 (100.0%)
+   - tech2: 786,445 (100.0%)
+   - brand: 786,445 (100.0%)
+   - feature: 786,445 (100.0%)
+   - rank: 786,445 (100.0%)
+
+[Price Distribution]
+   - Count: 303,980 (38.7% coverage)
+   - Min: $0.01
+   - Max: $79636.71
+   - Median: $9.99
+   - Mean:   $32.21
+
+   [Experimental Thresholds - Selectivity]
+      To test 90% selectivity (Top 90% items): Filter Price > $2.54 (33.7% actual)
+      To test 75% selectivity (Top 75% items): Filter Price > $5.25 (29.0% actual)
+      To test 50% selectivity (Top 50% items): Filter Price > $9.99 (18.6% actual)
+      To test 25% selectivity (Top 25% items): Filter Price > $18.99 (9.7% actual)
+      To test 10% selectivity (Top 10% items): Filter Price > $49.10 (3.9% actual)
+      To test 5% selectivity (Top 5% items): Filter Price > $99.49 (1.9% actual)
+      To test 1% selectivity (Top 1% items): Filter Price > $424.96 (0.4% actual)
+
+[Top Brands - For 'Rare' vs 'Common' Tests]
+   - Sony: 12,310 (1.57%)
+   - Generic: 11,524 (1.47%)
+   - Dell: 7,586 (0.96%)
+   - HP: 7,559 (0.96%)
+   - Samsung: 6,728 (0.86%)
+   - : 5,427 (0.69%)
+   - Canon: 4,727 (0.60%)
+   - Panasonic: 4,384 (0.56%)
+   - Asus: 3,786 (0.48%)
+   - Neewer: 3,783 (0.48%)
+
+[Top Categories]
+   - Computers: 244,665
+   - All Electronics: 129,569
+   - Camera & Photo: 125,075
+   - Home Audio & Theater: 102,125
+   - Cell Phones & Accessories: 64,356
+   - Car Electronics: 23,218
+   - Sports & Outdoors: 9,790
+   - Office Products: 8,587
+   - Portable Audio & Accessories: 7,678
+   - Tools & Home Improvement: 7,341
